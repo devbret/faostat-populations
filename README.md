@@ -9,3 +9,7 @@ Transforms CSV data into an interactive visualization to reveal how country popu
 The first program is a Python data-preparation script which converts a large population CSV dataset into JSON. It reads the source CSV, filters for total population records and removes duplicate countries. The final output is a concise JSON file where each country includes its name, unit of measurement and a dictionary of population values.
 
 There is also a D3.js visualization to animate population changes over time using a bubble graph. It loads the generated JSON file, filters out regions and represents each country as circles whose radius reflects population magnitude for a given year. The data visualization also recalculates scales per year, prevents bubble overlap and provides tooltips.
+
+## Other Notes
+
+In terms of the [source CSV dataset](https://www.fao.org/faostat/en/#data/OA), it is publicly available and provides historical population data across many countries and regions.
