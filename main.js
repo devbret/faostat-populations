@@ -109,7 +109,7 @@ function setTooltip(event, d) {
 
   tooltip.style(
     "transform",
-    `translate(${event.clientX + 14}px, ${event.clientY + 14}px)`
+    `translate(${event.clientX + 14}px, ${event.clientY + 14}px)`,
   ).html(`
           <div class="t">${d.country}</div>
           <div><span class="m">Year:</span> ${year}</div>
