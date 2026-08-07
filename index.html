@@ -4,54 +4,154 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>FAOSTAT Population Data</title>
+    <meta
+      name="description"
+      content="Transform FAOSTAT population CSV data into an animated D3 bubble visualization for exploring country-level population changes over time."
+    />
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <header>
-      <h1>FAOSTAT Population Data</h1>
-      <div class="panel meta">
-        <div class="panel year">
-          <div class="year" id="yearLabel">—</div>
-          <div class="hint" id="unitLabel"></div>
-        </div>
+    <div class="filters">
+      <h1 class="app-title">FAOSTAT Population Data</h1>
 
-        <div class="controls">
-          <button id="playBtn">Play</button>
-          <button id="resetBtn">Reset</button>
-
-          <label for="speed">Speed</label>
-          <input
-            id="speed"
-            type="range"
-            min="200"
-            max="2000"
-            step="100"
-            value="1000"
-          />
-          <span id="speedLabel" class="sub"></span>
-
-          <label for="year">Year</label>
-          <input
-            id="year"
-            type="range"
-            min="1950"
-            max="2050"
-            step="1"
-            value="1950"
-          />
-        </div>
+      <div class="transport" role="group" aria-label="Playback">
+        <button
+          id="toStartBtn"
+          type="button"
+          class="icon-btn"
+          aria-label="Jump to 1950"
+          title="Jump to first year (Home)"
+        >
+          ⏮
+        </button>
+        <button
+          id="stepBackBtn"
+          type="button"
+          class="icon-btn"
+          aria-label="Step back one year"
+          title="Back one year (←)"
+        >
+          ‹
+        </button>
+        <button
+          id="playFwdBtn"
+          type="button"
+          class="play-btn"
+          aria-pressed="false"
+          aria-label="Play forwards"
+          title="Play forwards (Space)"
+        >
+          ▶
+        </button>
+        <button
+          id="stepFwdBtn"
+          type="button"
+          class="icon-btn"
+          aria-label="Step forward one year"
+          title="Forward one year (→)"
+        >
+          ›
+        </button>
+        <button
+          id="toEndBtn"
+          type="button"
+          class="icon-btn"
+          aria-label="Jump to 2100"
+          title="Jump to last year (End)"
+        >
+          ⏭
+        </button>
       </div>
-    </header>
 
-    <div class="wrap">
-      <svg
-        id="viz"
-        role="img"
-        aria-label="Animated bubble chart of population by country"
-      ></svg>
+      <label class="field">
+        <span>Speed</span>
+        <input
+          id="speed"
+          type="range"
+          min="1"
+          max="20"
+          step="1"
+          value="4"
+          aria-describedby="speedLabel"
+        />
+        <output id="speedLabel" class="field-out">4 yr/s</output>
+      </label>
+
+      <label class="field">
+        <span>At the end</span>
+        <select id="endMode">
+          <option value="loop" selected>Loop</option>
+          <option value="once">Stop</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Size</span>
+        <select id="metric">
+          <option value="total" selected>Total population</option>
+          <option value="male">Male population</option>
+          <option value="female">Female population</option>
+          <option value="urban">Urban population</option>
+          <option value="rural">Rural population</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Color</span>
+        <select id="colorBy">
+          <option value="growth" selected>Growth rate</option>
+          <option value="urban">Share urban</option>
+          <option value="sexRatio">Males per female</option>
+          <option value="none">None</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Arrange</span>
+        <select id="layout">
+          <option value="pack" selected>Packed</option>
+          <option value="growth">By growth rate</option>
+          <option value="urban">By share urban</option>
+          <option value="region">By region</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Find</span>
+        <input
+          id="search"
+          type="search"
+          placeholder="Country..."
+          autocomplete="off"
+        />
+      </label>
+
+      <button
+        id="themeBtn"
+        type="button"
+        class="ghost-btn"
+        aria-label="Switch color theme"
+      >
+        Theme
+      </button>
     </div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <main class="layout">
+      <section
+        class="stage"
+        id="stage"
+        aria-label="World population, 1950 to 2100"
+      >
+        <div class="year-watermark" id="yearWatermark" aria-hidden="true"></div>
+        <svg
+          id="viz"
+          role="list"
+          aria-label="Population by country or area"
+        ></svg>
+      </section>
+    </main>
+
+    <div id="loader" class="loader">Loading population data...</div>
 
     <script type="module" src="main.js"></script>
   </body>
