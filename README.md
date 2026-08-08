@@ -1,6 +1,6 @@
 # FAOSTAT Populations Bubble Visualization
 
-![Screenshot feautring relatively sized bubbles representing total populations from countries around the world.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/c22bd4f7-d278-42ef-b10b-79f254065405.png)
+![Screenshot feautring relatively sized bubbles representing total populations from countries around the world.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/96f22440-391c-41ce-96c3-489d0f06e8e6.png)
 
 Transform FAOSTAT population CSV data into an animated D3 bubble visualization for exploring country-level population changes over time.
 
@@ -20,7 +20,7 @@ Below are the required software programs and instructions for installing and usi
 
 - [Python](https://www.python.org/downloads/)
 
-### Steps
+### Setup Steps
 
 1. Install the above programs
 
@@ -50,6 +50,10 @@ Below are the required software programs and instructions for installing and usi
 
 ## Other Considerations
 
+The sections below cover details outside of setting up and running this application. The first subsection outlines technical skills this repository is meant to showcase, while the second explains the terms under which the code may be reused, along with how to get in touch.
+
+### Abilities Demonstrated
+
 This project repo is intended to demonstrate an ability to do the following:
 
 - Convert CSV data into structured JSON for country-level population visualization
@@ -59,5 +63,11 @@ This project repo is intended to demonstrate an ability to do the following:
 - Animate population changes with play, pause, reset, slider and speed controls
 
 - Use bubble size, labels, colors and tooltips to make population differences easy to explore
+
+### License Information
+
+This project is released under the MIT License, with the full text available in the [LICENSE](LICENSE) file. You are free to use, modify, publish and sell copies of this software, including for commercial purposes, provided the original copyright and permission notice are included in all copies or substantial portions of the software.
+
+The software is provided "as is", without warranty of any kind and the author is not liable for any claim or damages arising from its use. Please note the FAOSTAT population data itself is distributed by the Food and Agriculture Organization under its own terms, which are separate from this repository's license.
 
 If you have any questions or would like to collaborate, please reach out either on GitHub or via [my website](https://bretbernhoft.com/).
