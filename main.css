@@ -229,6 +229,110 @@ input {
   touch-action: none;
 }
 
+#viz .node {
+  cursor: pointer;
+  outline: none;
+}
+
+#viz .node:focus-visible circle.mark {
+  stroke: var(--focus);
+  stroke-opacity: 1;
+  stroke-width: 3px;
+  stroke-dasharray: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  max-width: 260px;
+  padding: 9px 11px 10px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.tooltip[hidden] {
+  display: none;
+}
+
+.tip-name {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.tip-where {
+  color: var(--muted);
+}
+
+.tip-year {
+  margin-top: 2px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+.tip-primary {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-rows {
+  margin-top: 3px;
+}
+
+.tip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-row span:first-child {
+  color: var(--muted);
+}
+
+.tip-row.is-active,
+.tip-row.is-active span:first-child {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.tip-note {
+  margin-top: 6px;
+  color: var(--muted);
+  font-style: italic;
+}
+
 .loader {
   position: fixed;
   inset: 0;

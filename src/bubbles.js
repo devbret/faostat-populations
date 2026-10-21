@@ -2,6 +2,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { palette, DOMAINS } from "./palette.js";
 import { shortName } from "./shortnames.js";
 import * as fmt from "./format.js";
+import { createTooltip } from "./tooltip.js";
 
 const TOP_INSET = 14;
 
@@ -12,11 +13,16 @@ function textWidth(text, fontSize) {
   return measure.measureText(text).width;
 }
 
-export function createBubbles({ svg, data }) {
+export function createBubbles({ svg, tooltipEl, data }) {
   const root = svg.append("g").attr("class", "bubbles");
   const nodeLayer = root.append("g").attr("class", "nodes");
   const axisLayer = root.append("g").attr("class", "bubble-axis");
   const clusterLayer = root.append("g").attr("class", "cluster-labels");
+
+  const tooltip = createTooltip({ el: tooltipEl, data });
+  let hoverNode = null;
+  let focusNode = null;
+  let pinnedNode = null;
 
   let width = 0;
   let height = 0;
@@ -34,9 +40,15 @@ export function createBubbles({ svg, data }) {
       k = event.transform.k;
       root.attr("transform", event.transform);
       applyZoomScaling();
+      placeTooltip();
     });
 
   svg.call(zoom).on("dblclick.zoom", () => resetZoom());
+  svg.on("click", () => {
+    if (!pinnedNode) return;
+    pinnedNode = null;
+    syncTooltip();
+  });
 
   const sim = d3.forceSimulation().velocityDecay(0.35).on("tick", ticked);
 
@@ -50,6 +62,8 @@ export function createBubbles({ svg, data }) {
     nodeLayer
       .selectAll("g.node")
       .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+    placeTooltip();
   }
 
   function sizeOf(c, year) {
@@ -120,6 +134,35 @@ export function createBubbles({ svg, data }) {
       [0, 0],
       [width, height],
     ]);
+  }
+
+  function tipTarget() {
+    return pinnedNode || hoverNode || focusNode;
+  }
+
+  function placeTooltip() {
+    const d = tipTarget();
+    if (!d) return;
+    const tr = d3.zoomTransform(svg.node());
+    const [sx, sy] = tr.apply([d.x, d.y]);
+    tooltip.place(sx, sy, d.r * tr.k, width, height);
+  }
+
+  function syncTooltip() {
+    const d = tipTarget();
+    if (!d || !state) {
+      tooltip.hide();
+      return;
+    }
+    tooltip.render(d, state);
+    placeTooltip();
+  }
+
+  function dismissTooltip() {
+    pinnedNode = null;
+    hoverNode = null;
+    focusNode = null;
+    syncTooltip();
   }
 
   function matchesSearch(d) {
@@ -273,6 +316,11 @@ export function createBubbles({ svg, data }) {
       };
     });
 
+    const live = new Set(active);
+    if (pinnedNode && !live.has(pinnedNode)) pinnedNode = null;
+    if (hoverNode && !live.has(hoverNode)) hoverNode = null;
+    if (focusNode && !live.has(focusNode)) focusNode = null;
+
     const isProjection = data.isProjection(state.year);
 
     const dur = state.reducedMotion ? 0 : 600;
@@ -286,7 +334,30 @@ export function createBubbles({ svg, data }) {
       .append("g")
       .attr("class", "node")
       .attr("role", "listitem")
-      .attr("transform", (d) => `translate(${d.x},${d.y})`);
+      .attr("tabindex", 0)
+      .attr("transform", (d) => `translate(${d.x},${d.y})`)
+      .on("pointerenter", (event, d) => {
+        if (event.pointerType === "touch") return;
+        hoverNode = d;
+        syncTooltip();
+      })
+      .on("pointerleave", (event, d) => {
+        if (hoverNode === d) hoverNode = null;
+        syncTooltip();
+      })
+      .on("click", (event, d) => {
+        event.stopPropagation();
+        pinnedNode = pinnedNode === d ? null : d;
+        syncTooltip();
+      })
+      .on("focus", (event, d) => {
+        focusNode = d;
+        syncTooltip();
+      })
+      .on("blur", (event, d) => {
+        if (focusNode === d) focusNode = null;
+        syncTooltip();
+      });
 
     enter.append("circle").attr("class", "mark").attr("r", 0);
     enter.append("text").attr("class", "bubble-label");
@@ -334,6 +405,8 @@ export function createBubbles({ svg, data }) {
       sim.tick(60);
       ticked();
     }
+
+    syncTooltip();
   }
 
   function resize(w, h) {
@@ -346,5 +419,5 @@ export function createBubbles({ svg, data }) {
     }
   }
 
-  return { update, resize };
+  return { update, resize, dismissTooltip };
 }
