@@ -46,7 +46,11 @@ async function init() {
     onChange: onPlayerChange,
   });
 
-  bubbles = createBubbles({ svg: d3.select("#viz"), data });
+  bubbles = createBubbles({
+    svg: d3.select("#viz"),
+    tooltipEl: $("tooltip"),
+    data,
+  });
 
   wireControls();
   wireKeyboard();
@@ -174,6 +178,9 @@ function wireKeyboard() {
         event.preventDefault();
         player.pause();
         player.setYear(player.last);
+        break;
+      case "Escape":
+        bubbles.dismissTooltip();
         break;
       default:
         break;

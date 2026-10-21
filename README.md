@@ -34,19 +34,21 @@ Below are the required software programs and instructions for installing and usi
 
 6. Activate your virtual environment: `source venv/bin/activate`
 
-7. Download the [source data](https://www.fao.org/faostat/en/#data/OA) as a CSV file
+7. Install the needed dependencies: `pip install -r requirements.txt`
 
-8. Move the `Population_E_All_Data.csv` file into the root directory of this repo
+8. Download the [source data](https://www.fao.org/faostat/en/#data/OA) as a CSV file
 
-9. Process the raw data: `python3 app.py`
+9. Move the `Population_E_All_Data.csv` file into the root directory of this repo
 
-10. Start an HTTP server: `python3 -m http.server`
+10. Process the raw data: `python3 app.py`
 
-11. Access the visualization in a browser: `http://localhost:8000`
+11. Start an HTTP server: `python3 -m http.server`
 
-12. When finished, stop the HTTP server: `CTRL + c`
+12. Access the visualization in a browser: `http://localhost:8000`
 
-13. Exit the virtual environment: `deactivate`
+13. When finished, stop the HTTP server: `CTRL + c`
+
+14. Exit the virtual environment: `deactivate`
 
 ## Other Considerations
 
